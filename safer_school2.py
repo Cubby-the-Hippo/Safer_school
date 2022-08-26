@@ -36,7 +36,7 @@ FPS = 60 # frame per second
 WIDTH, HEIGHT = 800, 800 # screen size
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("SaferSchools")
-BIN_FONT = pygame.font.SysFont('arial.ttf', 30)
+BIN_FONT = pygame.font.SysFont('arial.ttf', 45)
 
 global background
 global earthquake_icon, fire_icon, bully_icon, internet_icon, gunshooting_icon
@@ -185,41 +185,40 @@ def action(question_id, answer_id):
             if answer_id == 1:
                 action_bully_question1('Right. Seek for help.', GREEN, 250, 450)
                 soundEffect(True)
-                # action when user chooses 'Tell someone'
+
             elif answer_id == 2:
                 print('2')
                 action_bully_question1('Bullying is not right!', RED, 250, 450)
                 soundEffect(False)
                                 
-                # do somthing
             elif answer_id == 3:
                 print('3')
                 action_bully_question1('You will get bullied more.', RED, 200, 450)
                 soundEffect(False)                
                 
-                #do something siefha oiesdfouiadshfiu asdh
             elif answer_id== 4:
                 print('4')
                 action_bully_question1('Escaping will not solve the problem!', RED, 100, 450)
-                soundEffect(False)                
-        
+                soundEffect(False)                       
                 
         elif question_id == 2:
             if answer_id == 1:
-                action_bully_question2('goofy', RED, 250, 450)
-                # action when user chooses 'Tell someone'
-            elif answer_id == 2:
-                action_bully_question2('damn bruhuhurhruhruhrurhurhruhruh', RED, 250, 450)
-                # do somthing
-            elif answer_id == 3:
-                action_bully_question2('lmao ur dumber than a rock', GREEN, 200, 450 )
-                #do something siefha oiesdfouiadshfiu asdh
-            elif answer_id== 4:
-                action_bully_question2('lmao ur dumber than a hippopotomas', RED, 100, 450)
-            
+                action_bully_question2('Physical examples: hitting, kicking, pushing...', RED, 50, 450)
+                soundEffect(False)                
 
- 
-     
+            elif answer_id == 2:
+                action_bully_question2('Verbal examples: insults, teasing, intimidation...', RED, 30, 450)
+                soundEffect(False)                
+                
+            elif answer_id == 3:
+                action_bully_question2('Social examples: lying, spreading rumours...', GREEN, 50, 450 )
+                soundEffect(True)                
+
+            elif answer_id== 4:
+                action_bully_question2('Cyber examples: hurtful emails or posts.', RED, 100, 450)
+                soundEffect(False)                
+            
+    
  
 def draw_answer_buttons(answer1, answer2, answer3, answer4, question_id):
     ''' 
@@ -235,7 +234,7 @@ def draw_answer_buttons(answer1, answer2, answer3, answer4, question_id):
     button_step_x = 300
     button_step_y = 100
     
-    button_fontsize = 30
+    button_fontsize = 45
     button_margin = 20
     button_radious = 20
     
