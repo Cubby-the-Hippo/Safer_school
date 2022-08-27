@@ -18,6 +18,8 @@ pygame.font.init()
 # define colors
 WHITE = (255,255,255)
 GREEN = (0,192,0)
+LIGHTGREEN = (105,193,126)
+
 
 BLUE = (0,50,200)
 DARKBLUE = [0,0,150]
@@ -29,6 +31,8 @@ PURPLE = (75,0,130)
 
 RED = [200, 50, 0]
 DARKRED = [150, 0, 0]
+
+
 
 FPS = 60 # frame per second
 
@@ -298,6 +302,51 @@ def draw_bully_window():
     WIN.blit(return_to_main, (return_x, return_y))    
 
     pygame.display.update()
+    
+    
+def load_bully_assessment_sprites():
+    '''load main window sprites '''
+    
+    global bully_assessment_background, bully_assessment_sad, bully_assessment_happy
+    global bully_assessment_sad_x, bully_assessment_sad_y
+    global bully_assessment_happy_x, bully_assessment_happy_y
+    
+    bully_assessment_background = load_sprite('Assets','bully_assessment_background.png', WIDTH, HEIGHT)   
+    bully_assessment_sad = load_sprite('Assets','bully_assessment_sad.png', 130,130)
+    bully_assessment_happy = load_sprite('Assets','bully_assessment_happy.png', 130,130)
+    
+    
+    bully_assessment_sad_x = 200
+    bully_assessment_sad_y = 200   
+    bully_assessment_happy_x = 500
+    bully_assessment_happy_y = 200
+    
+
+    
+def draw_bully_assessment_window():
+    ''' Draw the bully window '''    
+
+
+    # draw the background
+    WIN.fill(LIGHTGREEN)
+    #WIN.blit(bully_assessment_background, (0,0))
+    
+    #draw option icons
+    WIN.blit(bully_assessment_sad, (bully_assessment_sad_x, bully_assessment_sad_y))
+    WIN.blit(bully_assessment_happy, (bully_assessment_happy_x, bully_assessment_happy_y))
+    
+    question_text = BIN_FONT.render('Happened', 1, BLACK)
+    WIN.blit(question_text, (bully_assessment_sad_x-20, bully_assessment_sad_y-35))
+    
+    question_text = BIN_FONT.render('Did not happen', 1, BLACK)
+    WIN.blit(question_text, (bully_assessment_happy_x-50, bully_assessment_happy_y-35))
+    
+    # draw return icon
+    WIN.blit(return_to_main, (return_x, return_y))    
+
+    pygame.display.update()
+
+    
         
     
 def action_bully_question(evaluation, image, color, x, y):
@@ -488,7 +537,42 @@ def bully_assessment():
     global game_state
     game_state = "bully_assessment"
     
+    load_bully_assessment_sprites()    
+    draw_bully_assessment_window()    
     
+    run = True
+  
+    while run: 
+
+        events = pygame.event.get()       
+        for event in events:            
+            if event.type == pygame.QUIT:
+                run = False            
+                pygame.quit() 
+
+            # elif event.type == pygame.MOUSEBUTTONDOWN: 
+                
+            #     if event.button == 1:
+            #         mx, my = event.pos
+                    
+            #         if prev_question.get_rect().collidepoint(mx-prev_question_x, my-prev_question_y): # press the <- button
+            #             if question_id > 1:
+            #                 question_id -= 1 # previous question 
+                            
+            #                 bully_questions(question_id)
+            #         elif next_question.get_rect().collidepoint(mx-next_question_x, my-next_question_y): # press the -> button
+            #             if question_id < question_number: # not the last question
+            #                 question_id += 1 # next question
+            #                 bully_questions(question_id)
+            #         elif return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+            #             game_state = 'bully' 
+            #             run = False
+            #             break
+        
+        pygame_widgets.update(events)  # Call once every loop to allow widgets to render and listen
+        pygame.display.update()
+        
+        
 def bully_antibullying101():
     ''' Bully module '''
         
