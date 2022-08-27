@@ -36,7 +36,7 @@ FPS = 60 # frame per second
 WIDTH, HEIGHT = 800, 800 # screen size
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("SaferSchools")
-BIN_FONT = pygame.font.SysFont('arial.ttf', 30)
+BIN_FONT = pygame.font.SysFont('arial.ttf', 40)
 
 global background
 global earthquake_icon, fire_icon, bully_icon, internet_icon, gunshooting_icon
@@ -45,6 +45,17 @@ global fire_icon_x, fire_icon_y
 global bully_icon_x, bully_icon_y
 global internet_icon_x, internet_icon_y
 global gunshooting_icon_x, gunshooting_icon_y
+
+# def set_main_state():
+#     ''' set game state to be main so the we can return to the main window '''
+#     global game_state
+#     game_state = "main"
+ 
+    
+# def set_new_question():
+#     ''' set new question state '''
+#     global new_question
+#     new_question = True
 
 def load_sprite(folder_name, image_name, xsize, ysize):
     ''' Load and resize a sprite '''
@@ -68,73 +79,6 @@ def soundEffect(choice):
         mixer.music.load(wrong)
         mixer.music.set_volume(0.7)
         mixer.music.play()
-        
-def load_main_window_sprites():
-    '''load main window sprites '''
-    
-    global background
-    global earthquake_icon, fire_icon, bully_icon, internet_icon, gunshooting_icon    
-    global earthquake_icon_x, earthquake_icon_y
-    global fire_icon_x, fire_icon_y
-    global bully_icon_x, bully_icon_y
-    global internet_icon_x, internet_icon_y
-    global gunshooting_icon_x, gunshooting_icon_y
- 
-    background = load_sprite('Assets','school_background.jpg', WIDTH, int(HEIGHT/2))   
-    earthquake_icon = load_sprite('Assets','earthquake_icon2.jpg', 110,140)
-    fire_icon = load_sprite('Assets','fire.png', 110, 140)
-    bully_icon = load_sprite('Assets','bully.png', 110, 140)
-    internet_icon = load_sprite('Assets','internet2.jpg', 110,140)
-    gunshooting_icon = load_sprite('Assets','gun_shooting.png', 110,140)
-
-    
-    earthquake_icon_x = 100
-    earthquake_icon_y = 600   
-    fire_icon_x = 230
-    fire_icon_y = 600
-    bully_icon_x = 360
-    bully_icon_y = 600     
-    internet_icon_x = 490
-    internet_icon_y = 600
-    gunshooting_icon_x = 620
-    gunshooting_icon_y = 600    
-    
-def load_control_button_sprites():
-    ''' load control button sprites, including ->, <-, and return '''
-    
-    global prev_question, next_question, return_to_main
-    global prev_question_x, prev_question_y
-    global next_question_x, next_question_y
-    global return_x, return_y
-    
-    prev_question = load_sprite('Assets','prev_question.png', 50, 50)  
-    next_question = load_sprite('Assets', 'next_question.png', 50, 50)
-    return_to_main = load_sprite('Assets', 'return_to_main.png', 120, 60)
-    
-    prev_question_x = 630    
-    prev_question_y = 20    
-    next_question_x = 700
-    next_question_y = 20
-    return_x = 630
-    return_y = 80
-
-def draw_main_window():
-    ''' Draw the main window '''
-
-    # draw the background
-    WIN.fill(GREY)
-    WIN.blit(background, (0,0))
-
-    # define earthquake, fire, bully, internet, gun shooting icons (surface object)
-    
-    #draw option icons
-    WIN.blit(earthquake_icon, (earthquake_icon_x, earthquake_icon_y))
-    WIN.blit(fire_icon, (fire_icon_x, fire_icon_y))
-    WIN.blit(bully_icon, (bully_icon_x, bully_icon_y))
-    WIN.blit(internet_icon, (internet_icon_x, internet_icon_y))
-    WIN.blit(gunshooting_icon, (gunshooting_icon_x, gunshooting_icon_y))
-
-    pygame.display.update()
 
 def draw_control_buttons():
     ''' draw control buttons, including ->, <-, and return '''
@@ -142,116 +86,7 @@ def draw_control_buttons():
     WIN.blit(prev_question, (prev_question_x, prev_question_y))
     WIN.blit(next_question, (next_question_x, next_question_y))
     WIN.blit(return_to_main, (return_x, return_y))
-    
-def set_main_state():
-    ''' set game state to be main so the we can return to the main window '''
-    global game_state
-    game_state = "main"
-    
-def set_new_question():
-    ''' set new question state '''
-    global new_question
-    new_question = True
-  
-# def action_bully_question1(evaluation, color, x, y):
-        
-#     # draw earthquake background   
-#     bully_background = load_sprite('Assets', 'bully.gif', WIDTH, int(HEIGHT/2))      
-#     WIN.fill(SILVER)    
-#     WIN.blit(bully_background, (0, 0))
-   
-#     question_text = BIN_FONT.render(evaluation, 1, color)
-#     WIN.blit(question_text, (x, y))
-    
-#     draw_control_buttons() # draw < (previous) and > (next) buttons
-    
-# def action_bully_question2(evaluation, color, x, y):
-        
-#     # draw earthquake background   
-#     bully_background = load_sprite('Assets', 'bully_question2.jpg', WIDTH, int(HEIGHT/2))      
-#     WIN.fill(SILVER)    
-#     WIN.blit(bully_background, (0, 0))
-   
-#     question_text = BIN_FONT.render(evaluation, 1, color)
-#     WIN.blit(question_text, (x, y))
-    
-#     draw_control_buttons() # draw < (previous) and > (next) buttons
 
-def action_bully_question(evaluation, image, color, x, y):
-        
-    # draw earthquake background   
-    bully_background = load_sprite('Assets', image, WIDTH, int(HEIGHT/2))      
-    WIN.fill(SILVER)    
-    WIN.blit(bully_background, (0, 0))
-   
-    question_text = BIN_FONT.render(evaluation, 1, color)
-    WIN.blit(question_text, (x, y))
-    
-    draw_control_buttons() # draw < (previous) and > (next) buttons
-    
-    
-def action(question_id, answer_id):
-    if game_state == 'bully':
-        if question_id == 1:
-            image = 'bully.gif'
-            if answer_id == 1:
-                
-                action_bully_question('Right. Seek for help.', image, GREEN, 250, 450)
-                soundEffect(True)
-
-            elif answer_id == 2:
-                print('2')
-                action_bully_question('Bullying is not right!', image, RED, 250, 450)
-                soundEffect(False)
-                                
-            elif answer_id == 3:
-                print('3')
-                action_bully_question('You will get bullied more.', image, RED, 200, 450)
-                soundEffect(False)                
-                
-            elif answer_id== 4:
-                print('4')
-                action_bully_question('Escaping will not solve the problem!', image, RED, 100, 450)
-                soundEffect(False)                       
-                
-        elif question_id == 2:
-            image = 'bully_question2.jpg'
-            if answer_id == 1:
-                
-                action_bully_question('Physical examples: hitting, kicking, pushing...', image, RED, 50, 450)
-                soundEffect(False)                
-
-            elif answer_id == 2:
-                action_bully_question('Verbal examples: insults, teasing, intimidation...', image, RED, 30, 450)
-                soundEffect(False)                
-                
-            elif answer_id == 3:
-                action_bully_question('Social examples: lying, spreading rumours...', image, GREEN, 50, 450 )
-                soundEffect(True)                
-
-            elif answer_id== 4:
-                action_bully_question('Cyber examples: hurtful emails or posts.', image, RED, 100, 450)
-                soundEffect(False)                
-            
-        elif question_id == 3:
-            image = 'bully_question3.png'
-            if answer_id == 1:
-                action_bully_question('Correct. Low self esteem is one of the main issues in being bullied', image, GREEN, 30, 450)
-                soundEffect(True)                
-
-            elif answer_id == 2:
-                action_bully_question('Incorrect. Being happier is not one of the main issues in being bullied', image, RED, 20, 450)
-                soundEffect(False)                
-                
-            elif answer_id == 3:
-                action_bully_question('Correct. Depression is one of the main issues in being bullied', image, GREEN, 30, 450 )
-                soundEffect(True)                
-
-            elif answer_id== 4:
-                action_bully_question('Correct. Being more violent is one of the main issues in being bullied', image, GREEN, 30, 450)
-                soundEffect(True)                
-                
- 
 def draw_answer_buttons(answer1, answer2, answer3, answer4, question_id):
     ''' 
     Draw answer buttons. The texts of the four buttons are specified by 
@@ -349,7 +184,195 @@ def draw_answer_buttons(answer1, answer2, answer3, answer4, question_id):
         radius=button_radious,  # Radius of border corners (leave empty for not curved)
         onClick=lambda: action(question_id, 4)  # Function to call when clicked on
     )   
+    
+        
+def load_main_window_sprites():
+    '''load main window sprites '''
+    
+    global background
+    global earthquake_icon, fire_icon, bully_icon, internet_icon, gunshooting_icon    
+    global earthquake_icon_x, earthquake_icon_y
+    global fire_icon_x, fire_icon_y
+    global bully_icon_x, bully_icon_y
+    global internet_icon_x, internet_icon_y
+    global gunshooting_icon_x, gunshooting_icon_y
+ 
+    background = load_sprite('Assets','school_background.jpg', WIDTH, int(HEIGHT/2))   
+    earthquake_icon = load_sprite('Assets','earthquake_icon2.jpg', 110,140)
+    fire_icon = load_sprite('Assets','fire.png', 110, 140)
+    bully_icon = load_sprite('Assets','bully.png', 110, 140)
+    internet_icon = load_sprite('Assets','internet2.jpg', 110,140)
+    gunshooting_icon = load_sprite('Assets','gun_shooting.png', 110,140)
+    
+    
+    earthquake_icon_x = 100
+    earthquake_icon_y = 600   
+    fire_icon_x = 230
+    fire_icon_y = 600
+    bully_icon_x = 360
+    bully_icon_y = 600     
+    internet_icon_x = 490
+    internet_icon_y = 600
+    gunshooting_icon_x = 620
+    gunshooting_icon_y = 600    
+    
+    
+def draw_main_window():
+    ''' Draw the main window '''
 
+    # draw the background
+    WIN.fill(GREY)
+    WIN.blit(background, (0,0))
+
+    # define earthquake, fire, bully, internet, gun shooting icons (surface object)
+    
+    #draw option icons
+    WIN.blit(earthquake_icon, (earthquake_icon_x, earthquake_icon_y))
+    WIN.blit(fire_icon, (fire_icon_x, fire_icon_y))
+    WIN.blit(bully_icon, (bully_icon_x, bully_icon_y))
+    WIN.blit(internet_icon, (internet_icon_x, internet_icon_y))
+    WIN.blit(gunshooting_icon, (gunshooting_icon_x, gunshooting_icon_y))
+
+    pygame.display.update()
+    
+    
+def load_control_button_sprites():
+    ''' load control button sprites, including ->, <-, and return '''
+    
+    global prev_question, next_question, return_to_main
+    global prev_question_x, prev_question_y
+    global next_question_x, next_question_y
+    global return_x, return_y
+    
+    prev_question = load_sprite('Assets','prev_question.png', 50, 50)  
+    next_question = load_sprite('Assets', 'next_question.png', 50, 50)
+    return_to_main = load_sprite('Assets', 'return_to_main.png', 120, 60)
+    
+    prev_question_x = 630    
+    prev_question_y = 20    
+    next_question_x = 700
+    next_question_y = 20
+    return_x = 630
+    return_y = 80
+
+
+    
+def load_bully_window_sprites():
+    '''load main window sprites '''
+    
+    global bully_background
+    global bully_assessment_icon, bully_antibullying101_icon   
+    global bully_assessment_icon_x, bully_assessment_icon_y
+    global bully_antibullying101_icon_x, bully_antibullying101_icon_y
+    
+    bully_background = load_sprite('Assets','bully_background.jpeg', WIDTH, int(HEIGHT*0.7))   
+    bully_assessment_icon = load_sprite('Assets','assessment4.png', 130,130)
+    bully_antibullying101_icon = load_sprite('Assets','antibullying101_2.png', 130,130)
+    
+    
+    bully_assessment_icon_x = 200
+    bully_assessment_icon_y = 600   
+    bully_antibullying101_icon_x = 500
+    bully_antibullying101_icon_y = 600
+    
+    
+def draw_bully_window():
+    ''' Draw the bully window '''    
+
+
+    # draw the background
+    WIN.fill(WHITE)
+    WIN.blit(bully_background, (0,0))
+    print('here')
+    #draw option icons
+    WIN.blit(bully_assessment_icon, (bully_assessment_icon_x, bully_assessment_icon_y))
+    WIN.blit(bully_antibullying101_icon, (bully_antibullying101_icon_x, bully_antibullying101_icon_y))
+    
+    question_text = BIN_FONT.render('Assessment', 1, BLACK)
+    WIN.blit(question_text, (bully_assessment_icon_x-20, bully_assessment_icon_y+120))
+    
+    question_text = BIN_FONT.render('Anti-bullying 101', 1, BLACK)
+    WIN.blit(question_text, (bully_antibullying101_icon_x-50, bully_assessment_icon_y+120))
+    
+    # draw return icon
+    WIN.blit(return_to_main, (return_x, return_y))    
+
+    pygame.display.update()
+        
+def action_bully_question(evaluation, image, color, x, y):
+        
+    # draw earthquake background   
+    bully_background = load_sprite('Assets', image, WIDTH, int(HEIGHT/2))      
+    WIN.fill(SILVER)    
+    WIN.blit(bully_background, (0, 0))
+   
+    question_text = BIN_FONT.render(evaluation, 1, color)
+    WIN.blit(question_text, (x, y))
+    
+    draw_control_buttons() # draw < (previous) and > (next) buttons
+    
+    
+def action(question_id, answer_id):
+    if game_state == 'bully_antibully101':
+        if question_id == 1:
+            image = 'bully.gif'
+            if answer_id == 1:
+                
+                action_bully_question('Right. Seek for help.', image, GREEN, 250, 450)
+                soundEffect(True)
+
+            elif answer_id == 2:
+                print('2')
+                action_bully_question('Bullying is not right!', image, RED, 250, 450)
+                soundEffect(False)
+                                
+            elif answer_id == 3:
+                print('3')
+                action_bully_question('You will get bullied more.', image, RED, 200, 450)
+                soundEffect(False)                
+                
+            elif answer_id== 4:
+                print('4')
+                action_bully_question('Escaping will not solve the problem!', image, RED, 100, 450)
+                soundEffect(False)                       
+                
+        elif question_id == 2:
+            image = 'bully_question2.jpg'
+            if answer_id == 1:
+                
+                action_bully_question('Physical examples: hitting, kicking, pushing...', image, RED, 50, 450)
+                soundEffect(False)                
+
+            elif answer_id == 2:
+                action_bully_question('Verbal examples: insults, teasing, intimidation...', image, RED, 30, 450)
+                soundEffect(False)                
+                
+            elif answer_id == 3:
+                action_bully_question('Social examples: lying, spreading rumours...', image, GREEN, 50, 450 )
+                soundEffect(True)                
+
+            elif answer_id== 4:
+                action_bully_question('Cyber examples: hurtful emails or posts.', image, RED, 100, 450)
+                soundEffect(False)                
+            
+        elif question_id == 3:
+            image = 'bully_question3.png'
+            if answer_id == 1:
+                action_bully_question('Correct. Low self esteem is one of the main issues in being bullied', image, GREEN, 30, 450)
+                soundEffect(True)                
+
+            elif answer_id == 2:
+                action_bully_question('Incorrect. Being happier is not one of the main issues in being bullied', image, RED, 20, 450)
+                soundEffect(False)                
+                
+            elif answer_id == 3:
+                action_bully_question('Correct. Depression is one of the main issues in being bullied', image, GREEN, 30, 450 )
+                soundEffect(True)                
+
+            elif answer_id== 4:
+                action_bully_question('Correct. Being more violent is one of the main issues in being bullied', image, GREEN, 30, 450)
+                soundEffect(True)                
+                
 
 def first_bully_question():
     ''' Display the first question on bully '''
@@ -418,11 +441,58 @@ def bully_questions(question_id):
     elif question_id == 3:
         third_bully_question()
 
+
+   
 def bully():
-    ''' Bully module '''
-    
     global game_state
     game_state = "bully"
+    
+    load_bully_window_sprites() # may not be here, only need to call once
+    
+    draw_bully_window()
+
+    print('in bully()')
+    run = True
+    
+    while run:
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()                
+                
+            elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
+                if event.button == 1:
+                    mx, my = event.pos
+                    
+                    if bully_assessment_icon.get_rect().collidepoint(mx-bully_assessment_icon_x, my-bully_assessment_icon_y):
+                        bully_assessment()
+                        draw_bully_window()
+                        
+                    elif bully_antibullying101_icon.get_rect().collidepoint(mx-bully_antibullying101_icon_x, my-bully_antibullying101_icon_y):
+                        bully_antibullying101()                       
+                        draw_bully_window()
+                        
+                    elif return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+                        game_state = 'main' 
+                        run = False
+                        break
+
+
+    return
+      
+    
+def bully_assessment():
+    global game_state
+    game_state = "bully_assessment"
+    
+    
+def bully_antibullying101():
+    ''' Bully module '''
+        
+    global game_state
+    game_state = "bully_antibully101"
     
     question_number = 4 # total number of questions
     question_id = 1 # 'first question'
@@ -431,7 +501,7 @@ def bully():
     run = True     
  
     while run: 
-#        print(run)
+
         events = pygame.event.get()       
         for event in events:            
             if event.type == pygame.QUIT:
@@ -453,7 +523,7 @@ def bully():
                             question_id += 1 # next question
                             bully_questions(question_id)
                     elif return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
-                        game_state = 'main' 
+                        game_state = 'bully' 
                         run = False
                         break
         
@@ -551,7 +621,10 @@ def main():
     load_main_window_sprites()
     load_control_button_sprites()
     
-    set_main_state()
+#    set_main_state()
+    global game_state
+    game_state = "main"
+ 
     
     clock = pygame.time.Clock()
 
