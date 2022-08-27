@@ -283,7 +283,7 @@ def draw_bully_window():
     # draw the background
     WIN.fill(WHITE)
     WIN.blit(bully_background, (0,0))
-    print('here')
+    
     #draw option icons
     WIN.blit(bully_assessment_icon, (bully_assessment_icon_x, bully_assessment_icon_y))
     WIN.blit(bully_antibullying101_icon, (bully_antibullying101_icon_x, bully_antibullying101_icon_y))
@@ -299,6 +299,7 @@ def draw_bully_window():
 
     pygame.display.update()
         
+    
 def action_bully_question(evaluation, image, color, x, y):
         
     # draw earthquake background   
@@ -322,17 +323,17 @@ def action(question_id, answer_id):
                 soundEffect(True)
 
             elif answer_id == 2:
-                print('2')
+
                 action_bully_question('Bullying is not right!', image, RED, 250, 450)
                 soundEffect(False)
                                 
             elif answer_id == 3:
-                print('3')
+
                 action_bully_question('You will get bullied more.', image, RED, 200, 450)
                 soundEffect(False)                
                 
             elif answer_id== 4:
-                print('4')
+
                 action_bully_question('Escaping will not solve the problem!', image, RED, 100, 450)
                 soundEffect(False)                       
                 
@@ -451,7 +452,7 @@ def bully():
     
     draw_bully_window()
 
-    print('in bully()')
+
     run = True
     
     while run:
@@ -585,7 +586,7 @@ def fire():
     run = True        
     while run:
         events = pygame.event.get()       
-        print(events)
+
         for event in events:
             # need to click a return button
             
@@ -655,7 +656,7 @@ def main():
                     elif bully_icon.get_rect().collidepoint(mx-bully_icon_x, my-bully_icon_y):
                         bully()
                         draw_main_window()
-#                        print(run)
+
                         
                     elif gunshooting_icon.get_rect().collidepoint(mx-gunshooting_icon_x, my-gunshooting_icon_y):
                         gun_shooting()
