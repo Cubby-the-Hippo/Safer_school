@@ -31,6 +31,7 @@ PURPLE = (75,0,130)
 RED = [200, 50, 0]
 DARKRED = [150, 0, 0]
 
+LIGHTORANGE = [255, 204, 153]
 
 
 FPS = 60 # frame per second
@@ -201,10 +202,10 @@ def load_main_window_sprites():
     global internet_icon_x, internet_icon_y
     global gunshooting_icon_x, gunshooting_icon_y
  
-    background = load_sprite('Assets','school_background.jpg', WIDTH, int(HEIGHT*0.6))   
+    background = load_sprite('Assets','school_background.jpg', WIDTH, int(HEIGHT*0.7))   
     earthquake_icon = load_sprite('Assets','earthquake_icon2.jpg', 110,140)
     fire_icon = load_sprite('Assets','fire.png', 110, 140)
-    bully_icon = load_sprite('Assets','bully.png', 110, 140)
+    bully_icon = load_sprite('Assets','bully_remove_bg.png', 110, 140)
     internet_icon = load_sprite('Assets','internet2.jpg', 110,140)
     #gunshooting_icon = load_sprite('Assets','gun_shooting.png', 110,140)
     
@@ -236,6 +237,10 @@ def draw_main_window():
     WIN.blit(bully_icon, (bully_icon_x, bully_icon_y))
     WIN.blit(internet_icon, (internet_icon_x, internet_icon_y))
     # WIN.blit(gunshooting_icon, (gunshooting_icon_x, gunshooting_icon_y))
+    
+    
+    text = BIN_FONT_BIG.render('SaferSchools', 1, LIGHTORANGE)
+    WIN.blit(text, (250, 500))
 
     pygame.display.update()
     
@@ -312,11 +317,11 @@ def load_bully_assessment_sprites():
     global bully_assessment_nothappened_x, bully_assessment_nothappened_y
     
     bully_assessment_background = load_sprite('Assets','bully_assessment_background.png', WIDTH, HEIGHT)   
-    bully_assessment_happened = load_sprite('Assets','bully_assessment_sad.png', 130,130)
-    bully_assessment_nothappened = load_sprite('Assets','bully_assessment_happy.png', 130,130)
+    bully_assessment_happened = load_sprite('Assets','bully_assessment_sad.png', 200, 200)
+    bully_assessment_nothappened = load_sprite('Assets','bully_assessment_happy.png', 200, 200)
     
     
-    bully_assessment_happened_x = 200
+    bully_assessment_happened_x = 100
     bully_assessment_happened_y = 200   
     bully_assessment_nothappened_x = 500
     bully_assessment_nothappened_y = 200
@@ -335,10 +340,10 @@ def draw_bully_assessment_window(x, y, bully_item, bully_item_label):
     WIN.blit(bully_assessment_nothappened, (bully_assessment_nothappened_x, bully_assessment_nothappened_y))
     
     option_text = BIN_FONT.render('Happened', 1, BLACK)
-    WIN.blit(option_text, (bully_assessment_happened_x-20, bully_assessment_happened_x-35))
+    WIN.blit(option_text, (bully_assessment_happened_x, bully_assessment_happened_y-45))
     
     option_text = BIN_FONT.render('Did not happen', 1, BLACK)
-    WIN.blit(option_text, (bully_assessment_nothappened_x-50, bully_assessment_nothappened_y-35))
+    WIN.blit(option_text, (bully_assessment_nothappened_x, bully_assessment_nothappened_y-45))
     
     # draw return icon
     WIN.blit(return_to_main, (return_x, return_y))    
@@ -348,11 +353,11 @@ def draw_bully_assessment_window(x, y, bully_item, bully_item_label):
 
     # question
     question_text = BIN_FONT.render('Did this happen to you? Drag and drop. ', 1, WHITE)
-    WIN.blit(question_text, (150, 550))
+    WIN.blit(question_text, (150, 700))
     
     #label bully item
     sprite_text = BIN_FONT.render(bully_item_label, 1, PURPLE)
-    WIN.blit(sprite_text, (200,650))
+    WIN.blit(sprite_text, (360,475))
 
     pygame.display.update()
 
@@ -365,24 +370,24 @@ def draw_bully_assessment_result(happened, nothappened):
 #    WIN.blit(bully_assessment_background, (0,0))
     
     #draw option icons
-    WIN.blit(bully_assessment_happened, (200, 200))
+    WIN.blit(bully_assessment_happened, (100, 200))
     WIN.blit(bully_assessment_nothappened, (500, 200))
     
     option_text = BIN_FONT.render('Happened', 1, BLACK)
-    WIN.blit(option_text, (bully_assessment_happened_x-20, bully_assessment_happened_x-35))
+    WIN.blit(option_text, (bully_assessment_happened_x, bully_assessment_happened_y-45))
     
     option_text = BIN_FONT.render('Did not happen', 1, BLACK)
-    WIN.blit(option_text, (bully_assessment_nothappened_x-50, bully_assessment_nothappened_y-35))
+    WIN.blit(option_text, (bully_assessment_nothappened_x, bully_assessment_nothappened_y-45))
     
     # draw return icon
     WIN.blit(return_to_main, (return_x, return_y))    
     
     # display times happened and not happened
     result_text = BIN_FONT_BIG.render(str(happened), 1, RED)
-    WIN.blit(result_text, (250, 350))
+    WIN.blit(result_text, (200, 435))
     
     result_text = BIN_FONT_BIG.render(str(nothappened), 1, RED)
-    WIN.blit(result_text, (550, 355))
+    WIN.blit(result_text, (600, 435))
     
 
     # Conclusion
@@ -433,87 +438,87 @@ def action_bully_question(evaluation, image, color, x, y):
     
 def action(question_id, answer_id):
     if game_state == 'bully_antibully101':
-        if question_id == 1:
-            image = 'bully.gif'
+        if question_id == 2:
+            image = 'bully_question2.jpg'
             if answer_id == 1:
                 
-                action_bully_question('Right. Seek for help.', image, GREEN, 250, 450)
+                action_bully_question('Correct. Seek help from teachers and parents.', image, GREEN, 100, 450)
                 soundEffect(True)
 
             elif answer_id == 2:
 
-                action_bully_question('Bullying is not right!', image, RED, 250, 450)
+                action_bully_question('Incorrect. Bullying is not right!', image, RED, 200, 450)
                 soundEffect(False)
                                 
             elif answer_id == 3:
 
-                action_bully_question('You will get bullied more.', image, RED, 200, 450)
+                action_bully_question('Incorret. You may get bullied again.', image, RED, 200, 450)
                 soundEffect(False)                
                 
             elif answer_id== 4:
 
-                action_bully_question('Escaping will not solve the problem!', image, RED, 100, 450)
+                action_bully_question('Incorrect. Escaping will not solve the problem!', image, RED, 100, 450)
                 soundEffect(False)                       
                 
-        elif question_id == 2:
-            image = 'bully_question2.jpg'
+        elif question_id == 1:
+            image = 'bully_question1.jpg'
             if answer_id == 1:
                 
-                action_bully_question('Physical examples: hitting, kicking, pushing...', image, RED, 50, 450)
+                action_bully_question('Incorrect. Physical includes hitting, kicking, pushing...', image, RED, 30, 450)
                 soundEffect(False)                
 
             elif answer_id == 2:
-                action_bully_question('Verbal examples: insults, teasing, intimidation...', image, RED, 30, 450)
+                action_bully_question('Incorrect. Verbal includes insults, teasing, intimidation...', image, RED, 20, 450)
                 soundEffect(False)                
                 
             elif answer_id == 3:
-                action_bully_question('Social examples: lying, spreading rumours...', image, GREEN, 50, 450 )
+                action_bully_question('Correct. Social includes lying, spreading rumours...', image, GREEN, 50, 450 )
                 soundEffect(True)                
 
             elif answer_id== 4:
-                action_bully_question('Cyber examples: hurtful emails or posts.', image, RED, 100, 450)
+                action_bully_question('Incorrect. Cyber includes hurtful emails or posts...', image, RED, 50, 450)
                 soundEffect(False)                
             
         elif question_id == 3:
             image = 'bully_question3.png'
             if answer_id == 1:
-                action_bully_question('Correct. Low self esteem is one of the main issues in being bullied', image, GREEN, 30, 450)
+                action_bully_question('Correct. Low self esteem is one of the main issues.', image, GREEN, 30, 450)
                 soundEffect(True)                
 
             elif answer_id == 2:
-                action_bully_question('Incorrect. Being happier is not one of the main issues in being bullied', image, RED, 20, 450)
-                soundEffect(False)                
+                action_bully_question('Correct. Bullying can cause physical injury.', image, RED, 150, 450)
+                soundEffect(True)                
                 
             elif answer_id == 3:
-                action_bully_question('Correct. Depression is one of the main issues in being bullied', image, GREEN, 30, 450 )
+                action_bully_question('Correct. Victims can get depressed.', image, GREEN, 150, 450 )
                 soundEffect(True)                
 
             elif answer_id== 4:
-                action_bully_question('Correct. Being more violent is one of the main issues in being bullied', image, GREEN, 30, 450)
+                action_bully_question('Correct. Vctims may behave aggressively under stress.', image, GREEN, 30, 450)
                 soundEffect(True)                
                 
 
 def first_bully_question():
-    ''' Display the first question on bully '''
+    ''' Display the second question on bully '''
     
     global new_question
     new_question = False # it will change to True when > button is clicked
     
     # draw earthquake background   
-    bully_background = load_sprite('Assets', 'bully.gif', WIDTH, int(HEIGHT/2))      
+    bully_background = load_sprite('Assets', 'bully_question1.jpg', WIDTH, int(HEIGHT/2))      
     WIN.fill(SILVER)    
     WIN.blit(bully_background, (0, 0))
    
-    question_text = BIN_FONT.render('What will you do?', 1, BLACK)
+    question_text = BIN_FONT.render('Do you recognize this type of bullying? ', 1, BLACK)
     WIN.blit(question_text, (100, 450))
-    
+
     question_id = 1
-    draw_answer_buttons('Tell someone', 'Bully back', 'Ignore', 'Change school', question_id)
+    draw_answer_buttons('Physical', 'Verbal', 'Social', 'Cyber', question_id )
     draw_control_buttons() # draw < (previous) and > (next) buttons
-
-
+    
+    
 def second_bully_question():
-    ''' Display the second question on bully '''
+    ''' Display the first question on bully '''
     
     global new_question
     new_question = False # it will change to True when > button is clicked
@@ -523,16 +528,16 @@ def second_bully_question():
     WIN.fill(SILVER)    
     WIN.blit(bully_background, (0, 0))
    
-    question_text = BIN_FONT.render('Do you recognize this type of bullying? ', 1, BLACK)
+    question_text = BIN_FONT.render('When bully happens, what will you do?', 1, BLACK)
     WIN.blit(question_text, (100, 450))
-
-    question_id = 2
-    draw_answer_buttons('Physical', 'Verbal', 'Emotional', 'Cyber', question_id )
-    draw_control_buttons() # draw < (previous) and > (next) buttons
     
+    question_id = 2
+    draw_answer_buttons('Tell adults', 'Bully back', 'Ignore', 'Change school', question_id)
+    draw_control_buttons() # draw < (previous) and > (next) buttons
+ 
     
 def third_bully_question():
-    #Display the second question on bully 
+    #Display the third question on bully 
     
     #global new_question
     #new_question = False # it will change to True when > button is clicked
@@ -542,13 +547,12 @@ def third_bully_question():
     WIN.fill(SILVER)    
     WIN.blit(bully_background, (0, 0))
    
-    question_text = BIN_FONT.render('Concequenses of getting bullied:  ', 1, BLACK)
+    question_text = BIN_FONT.render('What are the consequences of getting bullied?', 1, BLACK)
     WIN.blit(question_text, (100, 450))
 
     question_id = 3
-    draw_answer_buttons('Low Self Esteem', 'Being Happier', 'Depression', 'More Violent', question_id )
+    draw_answer_buttons('Low Self Esteem', 'Physical injury', 'Depression', 'More Agressive', question_id )
     draw_control_buttons() # draw < (previous) and > (next) buttons
-
 
 
 def bully_questions(question_id):
@@ -559,7 +563,6 @@ def bully_questions(question_id):
         second_bully_question()
     elif question_id == 3:
         third_bully_question()
-
 
    
 def bully():
@@ -634,7 +637,7 @@ def bully_assessment():
 
     dragging = False
     x = 350
-    y = 600
+    y = 500
     xdrop_ori = x
     ydrop_ori = y
     xdrop = x
@@ -648,7 +651,7 @@ def bully_assessment():
     bully_item_list = ['bully_assessment_hitting.png', 'bully_assessment_grabbing.png', 'bully_assessment_teasing.png']
     
     cnt = 0
-    bully_item = load_sprite('Assets', bully_item_list[0], 120, 120)  
+    bully_item = load_sprite('Assets', bully_item_list[0], 150, 150)  
     draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[0])    
 
     while run:
@@ -706,7 +709,7 @@ def bully_assessment():
                             x = xdrop_ori # put the bully item to the same postion to start
                             y = ydrop_ori
                             
-                            bully_item = load_sprite('Assets', bully_item_list[cnt], 120, 120)
+                            bully_item = load_sprite('Assets', bully_item_list[cnt], 150, 150)
                             draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[cnt])  
                             
                         else:
