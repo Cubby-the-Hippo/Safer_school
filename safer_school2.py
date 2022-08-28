@@ -307,46 +307,55 @@ def draw_bully_window():
 def load_bully_assessment_sprites():
     '''load main window sprites '''
     
-    global bully_assessment_background, bully_assessment_sad, bully_assessment_happy
-    global bully_assessment_sad_x, bully_assessment_sad_y
-    global bully_assessment_happy_x, bully_assessment_happy_y
+    global bully_assessment_background, bully_assessment_happened, bully_assessment_nothappened
+    global bully_assessment_happened_x, bully_assessment_happened_y
+    global bully_assessment_nothappened_x, bully_assessment_nothappened_y
     
     bully_assessment_background = load_sprite('Assets','bully_assessment_background.png', WIDTH, HEIGHT)   
-    bully_assessment_sad = load_sprite('Assets','bully_assessment_sad.png', 130,130)
-    bully_assessment_happy = load_sprite('Assets','bully_assessment_happy.png', 130,130)
+    bully_assessment_happened = load_sprite('Assets','bully_assessment_sad.png', 130,130)
+    bully_assessment_nothappened = load_sprite('Assets','bully_assessment_happy.png', 130,130)
     
     
-    bully_assessment_sad_x = 200
-    bully_assessment_sad_y = 200   
-    bully_assessment_happy_x = 500
-    bully_assessment_happy_y = 200
+    bully_assessment_happened_x = 200
+    bully_assessment_happened_y = 200   
+    bully_assessment_nothappened_x = 500
+    bully_assessment_nothappened_y = 200
     
-
     
-def draw_bully_assessment_window():
+def draw_bully_assessment_window(x, y, bully_item, bully_item_label):
     ''' Draw the bully window '''    
 
 
     # draw the background
     WIN.fill(LIGHTGREEN)
-    #WIN.blit(bully_assessment_background, (0,0))
+    WIN.blit(bully_assessment_background, (0,0))
     
     #draw option icons
-    WIN.blit(bully_assessment_sad, (bully_assessment_sad_x, bully_assessment_sad_y))
-    WIN.blit(bully_assessment_happy, (bully_assessment_happy_x, bully_assessment_happy_y))
+    WIN.blit(bully_assessment_happened, (bully_assessment_happened_x, bully_assessment_happened_y))
+    WIN.blit(bully_assessment_nothappened, (bully_assessment_nothappened_x, bully_assessment_nothappened_y))
     
-    question_text = BIN_FONT.render('Happened', 1, BLACK)
-    WIN.blit(question_text, (bully_assessment_sad_x-20, bully_assessment_sad_y-35))
+    option_text = BIN_FONT.render('Happened', 1, BLACK)
+    WIN.blit(option_text, (bully_assessment_happened_x-20, bully_assessment_happened_x-35))
     
-    question_text = BIN_FONT.render('Did not happen', 1, BLACK)
-    WIN.blit(question_text, (bully_assessment_happy_x-50, bully_assessment_happy_y-35))
+    option_text = BIN_FONT.render('Did not happen', 1, BLACK)
+    WIN.blit(option_text, (bully_assessment_nothappened_x-50, bully_assessment_nothappened_y-35))
     
     # draw return icon
     WIN.blit(return_to_main, (return_x, return_y))    
+    
+    # draw bully item
+    WIN.blit(bully_item, (x, y))
+
+    # question
+    question_text = BIN_FONT.render('Did this happen to you? Drag and drop. ', 1, BLACK)
+    WIN.blit(question_text, (150, 550))
+    
+    #label bully item
+    sprite_text = BIN_FONT.render(bully_item_label, 1, PURPLE)
+    WIN.blit(sprite_text, (200,650))
 
     pygame.display.update()
 
-    
         
     
 def action_bully_question(evaluation, image, color, x, y):
@@ -531,47 +540,138 @@ def bully():
 
 
     return
-      
+ 
+
+
+
+
+def isInBins(bully_sprite, bin_sprite, xdrop, ydrop, x_bin, y_bin):
+    ''' check if the trash item has been moved into a bin '''
+
+    # get the bounding box of the trash sprite
+    xs_bully, ys_bully, xe_bully, ye_bully = bully_sprite.get_rect() 
+
+    # get the bounding box of the bin sprite    
+    xs_bin, ys_bin, xe_bin, ye_bin = bin_sprite.get_rect()
+
+    # check if bully is inside bin along x direction
+    xIsIn = (xdrop > x_bin and xdrop < x_bin + xe_bin) or (xdrop + xe_bully > x_bin and xdrop + xe_bully < x_bin + xe_bin)
     
+    # check if bully is inside bin along y direction
+    yIsIn = (ydrop > y_bin and ydrop < y_bin + ye_bin) or (ydrop + ye_bully > y_bin and ydrop + ye_bully < y_bin + ye_bin)
+    if xIsIn and yIsIn:
+        return True
+    else:
+        return False
+
+
+        
 def bully_assessment():
+    
     global game_state
     game_state = "bully_assessment"
     
     load_bully_assessment_sprites()    
-    draw_bully_assessment_window()    
     
     run = True
-  
-    while run: 
 
-        events = pygame.event.get()       
-        for event in events:            
+    dragging = False
+    x = 350
+    y = 600
+    xdrop_ori = x
+    ydrop_ori = y
+    xdrop = x
+    ydrop = y
+
+    maxcnt = 3
+    happened = 0
+    nothappened = 0
+
+    bully_item_label_list = ['hitting', 'grabbing', 'teasing']
+    bully_item_list = ['bully_assessment_hitting.png', 'bully_assessment_grabbing.png', 'bully_assessment_teasing.png']
+    
+    cnt = 0
+    bully_item = load_sprite('Assets', bully_item_list[0], 120, 120)  
+    draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[0])    
+
+    while run:
+
+        for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
-                run = False            
-                pygame.quit() 
-
-            # elif event.type == pygame.MOUSEBUTTONDOWN: 
+                run = False
+                pygame.quit()
                 
-            #     if event.button == 1:
-            #         mx, my = event.pos
+            elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
+                if event.button == 1:
+                    mx, my = event.pos
                     
-            #         if prev_question.get_rect().collidepoint(mx-prev_question_x, my-prev_question_y): # press the <- button
-            #             if question_id > 1:
-            #                 question_id -= 1 # previous question 
+                    if return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+                        game_state = 'bully' 
+                        run = False
+                        break
+                     
+                    xstart, ystart, xend, yend = bully_item.get_rect()
+                    
+                    if mx < xdrop + xend and mx > xdrop and my < ydrop + yend and my > ydrop: # successfully picked the bully item
+
+                        dragging = True
+                        mx, my = event.pos
+                        x, y = xdrop, ydrop
+                        off_x = x - mx
+                        off_y = y - my
+                        
+            elif event.type == pygame.MOUSEBUTTONUP: # release the bully item
+                if event.button == 1:
+                    dragging = False
+                    xdrop = x
+                    ydrop = y
+
+                    # check if bully item is in any one the bins                   
+                        
+                    isInHappened = isInBins(bully_item, bully_assessment_happened, xdrop, ydrop, bully_assessment_happened_x, bully_assessment_happened_y)
+                    isInNotHappened = isInBins(bully_item, bully_assessment_nothappened, xdrop, ydrop, bully_assessment_nothappened_x, bully_assessment_nothappened_y)
+
+
+                    if isInHappened:
+                        happened += 1
+                        soundEffect(False)
+                        
+                    elif isInNotHappened:
+                        nothappened += 1
+                        soundEffect(True)
+
+
+                    if isInHappened or isInNotHappened:
+                        cnt += 1
+                        if cnt < maxcnt:
+                            print(cnt, maxcnt)
+                            x = xdrop_ori # put the bully item to the same postion to start
+                            y = ydrop_ori
                             
-            #                 bully_questions(question_id)
-            #         elif next_question.get_rect().collidepoint(mx-next_question_x, my-next_question_y): # press the -> button
-            #             if question_id < question_number: # not the last question
-            #                 question_id += 1 # next question
-            #                 bully_questions(question_id)
-            #         elif return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
-            #             game_state = 'bully' 
-            #             run = False
-            #             break
+                            bully_item = load_sprite('Assets', bully_item_list[cnt], 120, 120)
+                            draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[cnt])  
+                            
+                        else:
+                           # draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[0])  
+                           print('finished questions!')
+                           game_state = 'bully'
+                           run = False
+                           break
+
+            elif event.type == pygame.MOUSEMOTION: # move the bully item
+                if dragging:
+                    mx, my = event.pos
+                    x = mx + off_x
+                    y = my + off_y
+                    draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[cnt])    
+                    
+                                      
+        # #draw_window()
+ 
+        # pygame.display.update()   
         
-        pygame_widgets.update(events)  # Call once every loop to allow widgets to render and listen
-        pygame.display.update()
-        
+
         
 def bully_antibullying101():
     ''' Bully module '''
