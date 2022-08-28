@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Sep  4 21:09:39 2021
+Created on Sat Aug  27  13:09:39 2022
 
 @author: apeng
 """
@@ -203,18 +203,18 @@ def load_main_window_sprites():
     global gunshooting_icon_x, gunshooting_icon_y
  
     background = load_sprite('Assets','school_background.jpg', WIDTH, int(HEIGHT*0.7))   
-    earthquake_icon = load_sprite('Assets','earthquake_icon2.jpg', 110,140)
+    earthquake_icon = load_sprite('Assets','earthquake_icon2.png', 110,140)
     fire_icon = load_sprite('Assets','fire.png', 110, 140)
     bully_icon = load_sprite('Assets','bully_remove_bg.png', 110, 140)
-    internet_icon = load_sprite('Assets','internet2.jpg', 110,140)
+    internet_icon = load_sprite('Assets','internet2.png', 110,140)
     #gunshooting_icon = load_sprite('Assets','gun_shooting.png', 110,140)
     
     
-    earthquake_icon_x = 110
+    earthquake_icon_x = 130
     earthquake_icon_y = 600   
-    fire_icon_x = 250
+    fire_icon_x = 270
     fire_icon_y = 600
-    bully_icon_x = 400
+    bully_icon_x = 420
     bully_icon_y = 600     
     internet_icon_x = 550
     internet_icon_y = 600
@@ -265,6 +265,148 @@ def load_control_button_sprites():
     return_y = 20
 
 
+
+
+
+
+
+
+
+
+def action_earthquake_question1(evaluation, color, x, y):
+    earthquake_background = load_sprite('Assets', '23.jfif', WIDTH, int(HEIGHT/2))
+    WIN.fill(SILVER)    
+    WIN.blit(earthquake_background, (0, 0))
+    question_text = BIN_FONT.render(evaluation, 1, color)
+    WIN.blit(question_text, (x, y))
+
+    draw_control_buttons()
+
+def action_earthquake_question2(evaluation, color, x, y):
+    earthquake_background = load_sprite('Assets', '17.jfif', WIDTH, int(HEIGHT/2))
+    WIN.fill(SILVER)    
+    WIN.blit(earthquake_background, (0, 0))
+    question_text = BIN_FONT.render(evaluation, 1, color)
+    WIN.blit(question_text, (x, y))
+
+    draw_control_buttons()
+
+def action_earthquake_question3(evaluation, color, x, y):
+    earthquake_background = load_sprite('Assets', 'AfterQuake.jfif', WIDTH, int(HEIGHT/2))
+    WIN.fill(SILVER)    
+    WIN.blit(earthquake_background, (0, 0))
+    question_text = BIN_FONT.render(evaluation, 1, color)
+    WIN.blit(question_text, (x, y))
+
+    draw_control_buttons()
+    
+
+
+def earthquake_question1():
+    global new_question
+    new_question = False
+
+    earthquake_background = load_sprite('Assets', '23.jfif', WIDTH, int(HEIGHT/2))
+    WIN.fill(SILVER)
+    WIN.blit(earthquake_background, (0, 0))
+
+    earthquake_text = BIN_FONT.render('During an earthquake, what should you do?', 1, BLACK)
+    WIN.blit(earthquake_text, (100, 450))
+
+    question_id = 1
+    draw_answer_buttons('Stand', 'Run around', 'Drop, cover, hold', 'Jump', question_id)
+    draw_control_buttons()
+
+def earthquake_question2():
+    global new_question
+    new_question = False
+
+    earthquake_background = load_sprite('Assets', '17.jfif', WIDTH, int(HEIGHT/2))
+    WIN.fill(SILVER)
+    WIN.blit(earthquake_background, (0, 0))
+
+    earthquake_text = BIN_FONT.render('Before an earthquake, what should you do?', 1, BLACK)
+    WIN.blit(earthquake_text, (100, 450)) #Take a look
+
+    question_id = 2
+    draw_answer_buttons('Fix hazards', 'Create a plan', 'Buy supplies', 'All are ideal', question_id)
+    draw_control_buttons()
+
+def earthquake_question3():
+    global new_question
+    new_question = False
+
+    earthquake_background = load_sprite('Assets', 'AfterQuake.jfif', WIDTH, int(HEIGHT/2))
+    WIN.fill(SILVER)
+    WIN.blit(earthquake_background, (0, 0))
+
+    earthquake_text = BIN_FONT.render('After the earthquake, its a good idea to...', 1, BLACK)
+    WIN.blit(earthquake_text, (100, 450))
+    #bully.gif         replace temporary earthquake
+    question_id = 3
+    draw_answer_buttons('Panic', 'Enter buildings', 'Help others', 'Do nothing', question_id)
+    draw_control_buttons()
+    
+    
+    
+def earthquake_questions(question_id):
+    if question_id == 1:
+        earthquake_question1()
+    elif question_id == 2:
+        earthquake_question2()
+    elif question_id == 3:
+        earthquake_question3()
+        
+        
+        
+def earthquake():
+    ''' earthquake module '''
+    
+    global game_state
+    game_state = "earthquake"
+    question_number = 4 #Can be changed
+    question_id = 1
+
+    earthquake_questions(question_id) #fix
+    run = True
+        
+    # draw earthquake background
+    #earthquake_background = load_sprite('Assets', 'earthquake_background2.jpg', WIDTH, int(HEIGHT/2))
+    #WIN.fill(SILVER)       
+    #WIN.blit(earthquake_background, (0, 0))    
+    
+    # draw control buttons < and >
+    #draw_control_buttons()
+        
+    while run:
+        events = pygame.event.get()       
+        for event in events:
+            # need to click a return button
+            if event.type == pygame.QUIT:
+                run = False            
+                pygame.quit() 
+            elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
+                if event.button == 1:
+                    mx, my = event.pos
+                    if prev_question.get_rect().collidepoint(mx-prev_question_x, my-prev_question_y):
+                        if question_id > 1:
+                            question_id -= 1
+                            earthquake_questions(question_id)
+                    elif next_question.get_rect().collidepoint(mx-next_question_x, my-next_question_y):
+                        if question_id < question_number:
+                            question_id += 1
+                            earthquake_questions(question_id)
+                    elif return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+                        game_state = 'main'
+                        run = False
+                        break
+        pygame_widgets.update(events)
+        pygame.display.update()
+    
+    return
+    
+    
+
     
 def load_bully_window_sprites():
     '''load main window sprites '''
@@ -285,6 +427,8 @@ def load_bully_window_sprites():
     bully_antibullying101_icon_y = 600
     
     
+
+
 def draw_bully_window():
     ''' Draw the bully window '''    
 
@@ -357,7 +501,7 @@ def draw_bully_assessment_window(x, y, bully_item, bully_item_label):
     
     #label bully item
     sprite_text = BIN_FONT.render(bully_item_label, 1, PURPLE)
-    WIN.blit(sprite_text, (360,475))
+    WIN.blit(sprite_text, (520,550))
 
     pygame.display.update()
 
@@ -486,7 +630,7 @@ def action(question_id, answer_id):
                 soundEffect(True)                
 
             elif answer_id == 2:
-                action_bully_question('Correct. Bullying can cause physical injury.', image, RED, 150, 450)
+                action_bully_question('Correct. Bullying can cause physical injury.', image, GREEN, 150, 450)
                 soundEffect(True)                
                 
             elif answer_id == 3:
@@ -495,7 +639,56 @@ def action(question_id, answer_id):
 
             elif answer_id== 4:
                 action_bully_question('Correct. Vctims may behave aggressively under stress.', image, GREEN, 30, 450)
-                soundEffect(True)                
+                soundEffect(True)   
+                
+                
+    elif game_state == 'earthquake':
+        if question_id == 1:
+            if answer_id == 1:
+                action_earthquake_question1('Incorect. A falling object may hit your head.', RED, 100, 450)
+                soundEffect(False)
+            elif answer_id == 2:
+                action_earthquake_question1('Earthquakes can knock you down.', RED, 200, 450)
+                soundEffect(False)
+            elif answer_id == 3:
+                action_earthquake_question1('Correct. This will help prevent injury.', GREEN, 150, 450)
+                soundEffect(True)
+                #score += 1
+            elif answer_id == 4:
+                action_earthquake_question1('Never, ever do that.', RED, 250, 450)
+                soundEffect(False)
+        
+        elif question_id == 2:
+            if answer_id == 1:
+                action_earthquake_question2('Ex.: Securing furniture, repairing loose areas...', GREEN, 100, 450)
+                soundEffect(True)
+            elif answer_id == 2:
+                action_earthquake_question2('Ideal for communication/organization.', GREEN, 150, 450)
+                soundEffect(True)
+            elif answer_id == 3:
+                action_earthquake_question2('Reduces the impact of the earthquake.', GREEN, 150, 450)
+                soundEffect(True)
+            elif answer_id == 4:
+                action_earthquake_question2('All are great ideas.', GREEN, 250, 450)
+                soundEffect(True)
+            
+        elif question_id == 3:
+            if answer_id == 1:
+                action_earthquake_question3('Panicking is never a good idea.', RED, 175, 450)
+                soundEffect(False)
+            elif answer_id == 2:
+                action_earthquake_question3('Aftershocks can collapse the building.', RED, 150, 450)
+                soundEffect(False)
+            elif answer_id == 3:
+                action_earthquake_question3('That is a great idea.', GREEN, 275 ,450)
+                soundEffect(True)
+            elif answer_id == 4:
+                action_earthquake_question3('Doing nothing wastes time.', RED, 200, 450)
+                soundEffect(False)
+
+
+
+                
                 
 
 def first_bully_question():
@@ -636,19 +829,19 @@ def bully_assessment():
     run = True
 
     dragging = False
-    x = 350
-    y = 500
+    x = 325
+    y = 485
     xdrop_ori = x
     ydrop_ori = y
     xdrop = x
     ydrop = y
 
-    maxcnt = 3
+    maxcnt = 4
     happened = 0
     nothappened = 0
 
-    bully_item_label_list = ['hitting', 'grabbing', 'teasing']
-    bully_item_list = ['bully_assessment_hitting.png', 'bully_assessment_grabbing.png', 'bully_assessment_teasing.png']
+    bully_item_label_list = ['Hitting', 'Grabbing', 'Teasing', 'Cyber Bullying']
+    bully_item_list = ['bully_assessment_hitting.png', 'bully_assessment_grabbing.png', 'bully_assessment_teasing.png', 'bully_assessment_cyber.png']
     
     cnt = 0
     bully_item = load_sprite('Assets', bully_item_list[0], 150, 150)  
@@ -774,39 +967,39 @@ def bully_antibullying101():
     return
 
 
-def earthquake():
-    ''' earthquake module '''
+# def earthquake():
+#     ''' earthquake module '''
     
-    global game_state
-    game_state = "earthquake"
+#     global game_state
+#     game_state = "earthquake"
         
-    # draw earthquake background    
-    earthquake_background = load_sprite('Assets', 'earthquake_background2.jpg', WIDTH, HEIGHT)
-    WIN.fill(SILVER)       
-    WIN.blit(earthquake_background, (0, 0))    
+#     # draw earthquake background    
+#     earthquake_background = load_sprite('Assets', 'earthquake_background2.jpg', WIDTH, HEIGHT)
+#     WIN.fill(SILVER)       
+#     WIN.blit(earthquake_background, (0, 0))    
     
-    # draw control buttons < and >
-    draw_control_buttons()
+#     # draw control buttons < and >
+#     draw_control_buttons()
 
-    run = True        
-    while run:
-        events = pygame.event.get()       
-        for event in events:
-            # need to click a return button
+#     run = True        
+#     while run:
+#         events = pygame.event.get()       
+#         for event in events:
+#             # need to click a return button
             
-            if event.type == pygame.QUIT:
-                run = False            
-                pygame.quit() 
-            elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
-                if event.button == 1:
-                    mx, my = event.pos
-                    if return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
-                        game_state = 'main'
-                        run = False
-                        break
-        pygame.display.update()
+#             if event.type == pygame.QUIT:
+#                 run = False            
+#                 pygame.quit() 
+#             elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
+#                 if event.button == 1:
+#                     mx, my = event.pos
+#                     if return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+#                         game_state = 'main'
+#                         run = False
+#                         break
+#         pygame.display.update()
     
-    return
+#     return
             
     # earthquake test
 
