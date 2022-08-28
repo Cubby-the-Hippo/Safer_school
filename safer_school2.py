@@ -1042,10 +1042,361 @@ def internet():
     # internet test
     pass
 
-# def gun_shooting():
-#     # draw gun_shooting window
-#     # gun shooting test
-#     pass
+
+
+# class FireStep():     
+#     def __init__(self, x, y, size,pic):
+#         self.frame = pygame.Rect(x, y, size, size)
+#         self.sprite =  load_sprite('Assets', pic, size,size)
+#         self.slot_number = -1
+    
+#     def draw (self):
+#         pygame.draw.rect(WIN, RED, self.frame )
+#         WIN.blit(self.sprite, (self.frame.x, self.frame.y))
+    
+# def fire():
+#     global game_state
+#     game_state = "fire"
+
+#     # draw earthquake background        
+#     fire_background = load_sprite('Assets', 'new_fire_setting.png', WIDTH,int(HEIGHT/2))     
+#     WIN.fill(SILVER)      
+#     WIN.blit(fire_background, (0, 0))
+
+#     # draw control buttons < and >    
+#     draw_control_buttons()
+#     question_text = BIN_FONT.render('Please sort them in the right order',15,BLACK)
+#     WIN.blit(question_text, (150, 450)) # should define x, y variables as there are multiple draws of question_text
+    
+#     BLOCK_SIZE = 100 #load_sprite('Assets','listen again yall.png', 50,100)
+#     #answer = [1, 5, 6, 4, 2, 3]
+#     steps = [
+#         #CORRECT ORDER
+#         FireStep(50,500, BLOCK_SIZE,'fire alarm.png'),
+      
+#         #step2
+#         FireStep(170,500, BLOCK_SIZE,'listen up yall.png'),
+      
+#         #step3  
+#         FireStep(290,500, BLOCK_SIZE,'go outside kids.png'),
+      
+      
+#         #step4
+#         FireStep(410,500, BLOCK_SIZE,'quiet yall.png'),
+      
+#         #step5
+#         FireStep(530,500, BLOCK_SIZE, 'listen again yall.png'),
+     
+       
+#         #step6
+#         FireStep(650,500, BLOCK_SIZE,'wait yall.png'),
+        
+#         # FireStep(50,500, BLOCK_SIZE,'fire alarm.png'),
+        
+#         # #step2
+#         # FireStep(170,500, BLOCK_SIZE,'listen again yall.png'),
+        
+#         # #step3  
+#         # FireStep(290,500, BLOCK_SIZE,'wait yall.png'),
+        
+        
+#         # #step4
+#         # FireStep(410,500, BLOCK_SIZE,'quiet yall.png'),
+        
+#         # #step5
+#         # FireStep(530,500, BLOCK_SIZE, 'listen up yall.png'),
+       
+#         # #step6
+#         # FireStep(650,500, BLOCK_SIZE,'go outside kids.png'),
+        
+#         ]
+    
+#     slots = [
+#         pygame.Rect(50,650, BLOCK_SIZE, BLOCK_SIZE),
+#         pygame.Rect(170,650, BLOCK_SIZE, BLOCK_SIZE),
+#         pygame.Rect(290,650, BLOCK_SIZE, BLOCK_SIZE),
+#         pygame.Rect(410,650, BLOCK_SIZE, BLOCK_SIZE),
+#         pygame.Rect(530,650, BLOCK_SIZE, BLOCK_SIZE),
+#         pygame.Rect(650,650, BLOCK_SIZE, BLOCK_SIZE),
+#         ]
+        
+        
+#     for i in range(len(steps)):
+#         steps[i].draw()
+    
+#     for i in range(len(slots)):
+#         pygame.draw.rect(WIN, WHITE, slots[i])
+   
+#     run = True       
+#     selected = None
+#     touched_slot = None
+
+#     while run:
+#         events = pygame.event.get()       
+#        # print(events)
+#         for event in events:
+#             # need to click a return button
+            
+#             if event.type == pygame.QUIT:
+#                 run = False            
+#                 pygame.quit() 
+#             elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
+#                 (mx, my) = event.pos
+#                 if event.button == 1:
+#                     if return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+#                         game_state = 'main' 
+#                         run = False
+#                         break
+#                     else:
+#                         for i in range(len(steps)): 
+#                             if steps[i].frame.collidepoint(event.pos) :
+#                                 selected = steps[i]
+#                                 select_offset_x = selected.frame.x - event.pos[0]
+#                                 select_offset_y = selected.frame.y - event.pos[1]
+#                                 break                          
+#             elif event.type == pygame.MOUSEMOTION:
+#                 if selected != None :
+#                     selected.frame.x = event.pos[0] + select_offset_x
+#                     selected.frame.y = event.pos[1] + select_offset_y
+#                     touched_slot = None
+#                     for i in range(len(slots)):
+#                         if selected.frame.colliderect(slots[i]):
+#                             touched_slot = slots[i]
+#                             break;
+                    
+                  
+#             elif event.type == pygame.MOUSEBUTTONUP: #automatically lines up into the target
+#                 if event.button == 1:
+#                     if selected != None:
+#                         selected.slot_number = -1
+#                         for i in range(len(slots)):
+#                             if selected.frame.colliderect(slots[i]):
+#                                 selected.frame.x = slots[i].x
+#                                 selected.frame.y = slots[i].y
+#                                 selected.slot_number = i
+#                                 #if the square is not in the target it is true 
+#                                 # and if its in the targetits false like a light switch
+#                                 break;
+#                         selected = None 
+                                
+#         WIN.fill(SILVER)      
+#         WIN.blit(fire_background, (0, 0))
+#         draw_control_buttons()
+#         WIN.blit(question_text, (150, 450))
+
+#         for i in range(len(slots)):
+#             if slots[i] == touched_slot:
+#                 slot_color = BLUE
+#             else:
+#                 slot_color = WHITE
+#             pygame.draw.rect(WIN, slot_color, slots[i])
+            
+#         for i in range(len(steps)):
+#             steps[i].draw()
+        
+       
+#         # check if all the steps are valid
+      
+#         completed = True
+#         for i in range(len(steps)):
+#             if steps[i].slot_number < 0:
+#                 completed = False
+#                 break;
+                
+#         if completed:
+#             correct_order = True
+#             for i in range(len(steps)):
+#                 if steps[i].slot_number != i: # rethink
+#                     correct_order = False
+#                     break;
+#             if (correct_order):
+#                WIN.blit(BIN_FONT.render("Congratulations!, good job",20,GREEN),(150,500))
+#             else:
+#                 WIN.blit(BIN_FONT.render("Something wrong, try again..",20,RED),(150,500))
+            
+            
+#         pygame.display.update()
+    
+#     return
+
+
+
+
+class FireStep():     
+    def __init__(self, x, y, size,pic):
+        self.frame = pygame.Rect(x, y, size, size)
+        self.sprite =  load_sprite('Assets', pic, size,size)
+        self.slot_number = -1
+    
+    def draw (self):
+        pygame.draw.rect(WIN, RED, self.frame )
+        WIN.blit(self.sprite, (self.frame.x, self.frame.y))
+    
+def fire():
+    global game_state
+    game_state = "fire"
+
+    # draw earthquake background        
+    fire_background = load_sprite('Assets', 'new_fire_setting.png', WIDTH,int(HEIGHT/2))     
+    WIN.fill(SILVER)      
+    WIN.blit(fire_background, (0, 0))
+
+    # draw control buttons < and >    
+    draw_control_buttons()
+    question_text = BIN_FONT.render('Please sort them in the right order',15,BLACK)
+    WIN.blit(question_text, (150,450))
+    
+    BLOCK_SIZE = 100 #load_sprite('Assets','listen again yall.png', 50,100)
+    steps = [
+        # # step1
+        # FireStep(50,500, BLOCK_SIZE,'fire alarm.png'),
+        
+        # #step2
+        # FireStep(170,500, BLOCK_SIZE,'listen up yall.png'),
+        
+        # #step3  
+        # FireStep(290,500, BLOCK_SIZE,'go outside kids.png'),
+        
+        
+        # #step4
+        # FireStep(410,500, BLOCK_SIZE,'quiet yall.png'),
+        
+        # #step5
+        # FireStep(530,500, BLOCK_SIZE, 'listen again yall.png'),
+       
+        # #step6
+        # FireStep(650,500, BLOCK_SIZE,'wait yall.png'),
+        
+        FireStep(310,450, BLOCK_SIZE,'fire alarm.png'),
+        
+        #step2
+        FireStep(450,450, BLOCK_SIZE,'listen up yall.png'),
+        
+        #step3  
+        FireStep(380,450, BLOCK_SIZE,'go outside kids.png'),
+        
+        
+        #step4
+        FireStep(170,450, BLOCK_SIZE,'quiet yall.png'),
+        
+        #step5
+        FireStep(100,450, BLOCK_SIZE, 'listen again yall.png'),
+       
+        #step6
+        FireStep(520,450, BLOCK_SIZE,'wait yall.png'),        
+        
+        ]
+    
+    slots = [
+        pygame.Rect(50,650, BLOCK_SIZE, BLOCK_SIZE),
+        pygame.Rect(170,650, BLOCK_SIZE, BLOCK_SIZE),
+        pygame.Rect(290,650, BLOCK_SIZE, BLOCK_SIZE),
+        pygame.Rect(410,650, BLOCK_SIZE, BLOCK_SIZE),
+        pygame.Rect(530,650, BLOCK_SIZE, BLOCK_SIZE),
+        pygame.Rect(650,650, BLOCK_SIZE, BLOCK_SIZE),
+        ]
+        
+        
+    for i in range(len(steps)):
+        steps[i].draw()
+    
+    for i in range(len(slots)):
+        pygame.draw.rect(WIN, WHITE, slots[i])
+   
+    run = True       
+    selected = None
+    touched_slot = None
+
+    while run:
+        events = pygame.event.get()       
+       # print(events)
+        for event in events:
+            # need to click a return button
+            
+            if event.type == pygame.QUIT:
+                run = False            
+                pygame.quit() 
+            elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
+                (mx, my) = event.pos
+                if event.button == 1:
+                    if return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+                        game_state = 'main' 
+                        run = False
+                        break
+                    else:
+                        for i in range(len(steps)): 
+                            if steps[i].frame.collidepoint(event.pos) :
+                                selected = steps[i]
+                                select_offset_x = selected.frame.x - event.pos[0]
+                                select_offset_y = selected.frame.y - event.pos[1]
+                                break                          
+            elif event.type == pygame.MOUSEMOTION:
+                if selected != None :
+                    selected.frame.x = event.pos[0] + select_offset_x
+                    selected.frame.y = event.pos[1] + select_offset_y
+                    touched_slot = None
+                    for i in range(len(slots)):
+                        if selected.frame.colliderect(slots[i]):
+                            touched_slot = slots[i]
+                            break;
+                    
+                  
+            elif event.type == pygame.MOUSEBUTTONUP: #automatically lines up into the target
+                if event.button == 1:
+                    if selected != None:
+                        selected.slot_number = -1
+                        for i in range(len(slots)):
+                            if selected.frame.colliderect(slots[i]):
+                                selected.frame.x = slots[i].x
+                                selected.frame.y = slots[i].y
+                                selected.slot_number = i
+                                #if the square is not in the target it is true 
+                                # and if its in the targetits false like a light switch
+                                break;
+                        selected = None 
+                                
+        WIN.fill(SILVER)      
+        WIN.blit(fire_background, (0, 0))
+        draw_control_buttons()
+        WIN.blit(question_text, (150,450))
+
+        for i in range(len(slots)):
+            if slots[i] == touched_slot:
+                slot_color = BLUE
+            else:
+                slot_color = WHITE
+            pygame.draw.rect(WIN, slot_color, slots[i])
+            
+        for i in range(len(steps)):
+            steps[i].draw()
+        
+       
+        # check if all the steps are valid
+      
+        completed = True
+        for i in range(len(steps)):
+            if steps[i].slot_number < 0:
+                completed = False
+                break;
+                
+        if completed:
+            correct_order = True
+            for i in range(len(steps)):
+                if steps[i].slot_number != i:
+                    correct_order = False
+                    break;
+            if (correct_order):
+               WIN.blit(BIN_FONT.render("Congratulations!, good job",20,GREEN),(150,500))
+            else:
+                WIN.blit(BIN_FONT.render("Something wrong, try again..",20,RED),(150,500))
+            
+            
+        pygame.display.update()
+    
+    return
+
+
+
 
 
 def main():
