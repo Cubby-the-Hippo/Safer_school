@@ -19,8 +19,7 @@ pygame.font.init()
 WHITE = (255,255,255)
 GREEN = (0,192,0)
 LIGHTGREEN = (105,193,126)
-
-
+YELLOWGREEN = (178,210,102)
 BLUE = (0,50,200)
 DARKBLUE = [0,0,150]
 
@@ -41,6 +40,7 @@ WIDTH, HEIGHT = 800, 800 # screen size
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("SaferSchools")
 BIN_FONT = pygame.font.SysFont('arial.ttf', 40)
+BIN_FONT_BIG = pygame.font.SysFont('arial.ttf', 60)
 
 global background
 global earthquake_icon, fire_icon, bully_icon, internet_icon, gunshooting_icon
@@ -201,31 +201,31 @@ def load_main_window_sprites():
     global internet_icon_x, internet_icon_y
     global gunshooting_icon_x, gunshooting_icon_y
  
-    background = load_sprite('Assets','school_background.jpg', WIDTH, int(HEIGHT/2))   
+    background = load_sprite('Assets','school_background.jpg', WIDTH, int(HEIGHT*0.6))   
     earthquake_icon = load_sprite('Assets','earthquake_icon2.jpg', 110,140)
     fire_icon = load_sprite('Assets','fire.png', 110, 140)
     bully_icon = load_sprite('Assets','bully.png', 110, 140)
     internet_icon = load_sprite('Assets','internet2.jpg', 110,140)
-    gunshooting_icon = load_sprite('Assets','gun_shooting.png', 110,140)
+    #gunshooting_icon = load_sprite('Assets','gun_shooting.png', 110,140)
     
     
-    earthquake_icon_x = 100
+    earthquake_icon_x = 110
     earthquake_icon_y = 600   
-    fire_icon_x = 230
+    fire_icon_x = 250
     fire_icon_y = 600
-    bully_icon_x = 360
+    bully_icon_x = 400
     bully_icon_y = 600     
-    internet_icon_x = 490
+    internet_icon_x = 550
     internet_icon_y = 600
-    gunshooting_icon_x = 620
-    gunshooting_icon_y = 600    
+   # gunshooting_icon_x = 620
+   # gunshooting_icon_y = 600    
     
     
 def draw_main_window():
     ''' Draw the main window '''
 
     # draw the background
-    WIN.fill(GREY)
+    WIN.fill(YELLOWGREEN)
     WIN.blit(background, (0,0))
 
     # define earthquake, fire, bully, internet, gun shooting icons (surface object)
@@ -235,7 +235,7 @@ def draw_main_window():
     WIN.blit(fire_icon, (fire_icon_x, fire_icon_y))
     WIN.blit(bully_icon, (bully_icon_x, bully_icon_y))
     WIN.blit(internet_icon, (internet_icon_x, internet_icon_y))
-    WIN.blit(gunshooting_icon, (gunshooting_icon_x, gunshooting_icon_y))
+    # WIN.blit(gunshooting_icon, (gunshooting_icon_x, gunshooting_icon_y))
 
     pygame.display.update()
     
@@ -256,8 +256,8 @@ def load_control_button_sprites():
     prev_question_y = 20    
     next_question_x = 700
     next_question_y = 20
-    return_x = 630
-    return_y = 80
+    return_x = 50
+    return_y = 20
 
 
     
@@ -327,7 +327,7 @@ def draw_bully_assessment_window(x, y, bully_item, bully_item_label):
 
 
     # draw the background
-    WIN.fill(LIGHTGREEN)
+    WIN.fill(GREEN)
     WIN.blit(bully_assessment_background, (0,0))
     
     #draw option icons
@@ -347,7 +347,7 @@ def draw_bully_assessment_window(x, y, bully_item, bully_item_label):
     WIN.blit(bully_item, (x, y))
 
     # question
-    question_text = BIN_FONT.render('Did this happen to you? Drag and drop. ', 1, BLACK)
+    question_text = BIN_FONT.render('Did this happen to you? Drag and drop. ', 1, WHITE)
     WIN.blit(question_text, (150, 550))
     
     #label bully item
@@ -356,6 +356,66 @@ def draw_bully_assessment_window(x, y, bully_item, bully_item_label):
 
     pygame.display.update()
 
+def draw_bully_assessment_result(happened, nothappened):
+    ''' Draw the bully window '''    
+
+
+    # draw the background
+    WIN.fill(LIGHTGREEN)
+#    WIN.blit(bully_assessment_background, (0,0))
+    
+    #draw option icons
+    WIN.blit(bully_assessment_happened, (200, 200))
+    WIN.blit(bully_assessment_nothappened, (500, 200))
+    
+    option_text = BIN_FONT.render('Happened', 1, BLACK)
+    WIN.blit(option_text, (bully_assessment_happened_x-20, bully_assessment_happened_x-35))
+    
+    option_text = BIN_FONT.render('Did not happen', 1, BLACK)
+    WIN.blit(option_text, (bully_assessment_nothappened_x-50, bully_assessment_nothappened_y-35))
+    
+    # draw return icon
+    WIN.blit(return_to_main, (return_x, return_y))    
+    
+    # display times happened and not happened
+    result_text = BIN_FONT_BIG.render(str(happened), 1, RED)
+    WIN.blit(result_text, (250, 350))
+    
+    result_text = BIN_FONT_BIG.render(str(nothappened), 1, RED)
+    WIN.blit(result_text, (550, 355))
+    
+
+    # Conclusion
+    result_text = BIN_FONT.render('Your risk of getting bullied: ', 1, BLACK)
+    WIN.blit(result_text, (150, 550))
+    
+    risk = int(float(happened)/float(happened + nothappened)*100)
+    
+    result_text = BIN_FONT_BIG.render(str(risk) + '%', 1, RED)
+    WIN.blit(result_text, (560, 545))
+    pygame.display.update()
+
+    run = True
+    
+    while run:
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()                
+                
+            elif event.type == pygame.MOUSEBUTTONDOWN: # pick up the trash
+                if event.button == 1:
+                    mx, my = event.pos
+                    
+                    if return_to_main.get_rect().collidepoint(mx-return_x, my-return_y):
+                        game_state = 'bully' 
+                        run = False
+                        break
+    
+    pygame.display.update()
+    
         
     
 def action_bully_question(evaluation, image, color, x, y):
@@ -538,11 +598,8 @@ def bully():
                         run = False
                         break
 
-
     return
  
-
-
 
 
 def isInBins(bully_sprite, bin_sprite, xdrop, ydrop, x_bin, y_bin):
@@ -653,8 +710,7 @@ def bully_assessment():
                             draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[cnt])  
                             
                         else:
-                           # draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[0])  
-                           print('finished questions!')
+                           draw_bully_assessment_result(happened, nothappened)  
                            game_state = 'bully'
                            run = False
                            break
@@ -666,12 +722,8 @@ def bully_assessment():
                     y = my + off_y
                     draw_bully_assessment_window(x, y, bully_item, bully_item_label_list[cnt])    
                     
-                                      
-        # #draw_window()
- 
-        # pygame.display.update()   
-        
-
+                                       
+    
         
 def bully_antibullying101():
     ''' Bully module '''
@@ -794,10 +846,10 @@ def internet():
     # internet test
     pass
 
-def gun_shooting():
-    # draw gun_shooting window
-    # gun shooting test
-    pass
+# def gun_shooting():
+#     # draw gun_shooting window
+#     # gun shooting test
+#     pass
 
 
 def main():
@@ -842,9 +894,9 @@ def main():
                         draw_main_window()
 
                         
-                    elif gunshooting_icon.get_rect().collidepoint(mx-gunshooting_icon_x, my-gunshooting_icon_y):
-                        gun_shooting()
-                        draw_main_window()
+                    # elif gunshooting_icon.get_rect().collidepoint(mx-gunshooting_icon_x, my-gunshooting_icon_y):
+                    #     gun_shooting()
+                    #     draw_main_window()
                         
                     elif internet_icon.get_rect().collidepoint(mx-internet_icon_x, my-internet_icon_y):
                         internet()
