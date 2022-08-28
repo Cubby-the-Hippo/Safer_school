@@ -596,7 +596,7 @@ def action(question_id, answer_id):
                                 
             elif answer_id == 3:
 
-                action_bully_question('Incorret. You may get bullied again.', image, RED, 200, 450)
+                action_bully_question('Incorrect. You may get bullied again.', image, RED, 200, 450)
                 soundEffect(False)                
                 
             elif answer_id== 4:
@@ -638,7 +638,7 @@ def action(question_id, answer_id):
                 soundEffect(True)                
 
             elif answer_id== 4:
-                action_bully_question('Correct. Vctims may behave aggressively under stress.', image, GREEN, 30, 450)
+                action_bully_question('Correct. Victims may behave aggressively under stress.', image, GREEN, 30, 450)
                 soundEffect(True)   
                 
                 
@@ -1244,7 +1244,7 @@ def fire():
     # draw control buttons < and >    
     draw_control_buttons()
     question_text = BIN_FONT.render('Please sort them in the right order',15,BLACK)
-    WIN.blit(question_text, (150,450))
+    WIN.blit(question_text, (150,420))
     
     BLOCK_SIZE = 100 #load_sprite('Assets','listen again yall.png', 50,100)
     steps = [
@@ -1358,7 +1358,7 @@ def fire():
         WIN.fill(SILVER)      
         WIN.blit(fire_background, (0, 0))
         draw_control_buttons()
-        WIN.blit(question_text, (150,450))
+        WIN.blit(question_text, (150,420))
 
         for i in range(len(slots)):
             if slots[i] == touched_slot:
@@ -1386,9 +1386,9 @@ def fire():
                     correct_order = False
                     break;
             if (correct_order):
-               WIN.blit(BIN_FONT.render("Congratulations!, good job",20,GREEN),(150,500))
+               WIN.blit(BIN_FONT.render("Congratulations! Good job!",20,GREEN),(150,500))
             else:
-                WIN.blit(BIN_FONT.render("Something wrong, try again..",20,RED),(150,500))
+                WIN.blit(BIN_FONT.render("Something is wrong, try again...",20,RED),(150,500))
             
             
         pygame.display.update()
